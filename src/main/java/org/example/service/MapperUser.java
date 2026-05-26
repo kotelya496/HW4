@@ -1,7 +1,7 @@
 package org.example.service;
 
 
-import org.example.controller.DTO.UserDto;
+import org.example.service.DTO.UserDto;
 import org.example.entity.UserEntity;
 
 public class MapperUser {
