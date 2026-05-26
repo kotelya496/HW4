@@ -1,8 +1,8 @@
 package org.example.controller;
 
 import jakarta.persistence.EntityNotFoundException;
-import org.example.controller.DTO.UserDto;
-import org.example.service.UserServise;
+import org.example.service.DTO.UserDto;
+import org.example.service.UserService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -28,14 +28,14 @@ class UserControllerHTTPTest {
     private MockMvc mockMvc;
 
     @MockitoBean
-    UserServise servise;
+    UserService servise;
 
     @Test
     void createUser_ShouldReturnCreatedUser() throws Exception {
 
         UserDto savedUser = createUserDtoforTest(1l,"Vasya","vasya@mail.ru",60);
 
-        when(servise.creatUser(any(UserDto.class))).thenReturn(savedUser);
+        when(servise.createUser(any(UserDto.class))).thenReturn(savedUser);
 
         String jsonRequest = """
             {
@@ -54,7 +54,7 @@ class UserControllerHTTPTest {
                 .andExpect(jsonPath("$.email").value("vasya@mail.ru"))
                 .andExpect(jsonPath("$.age").value(60));
 
-        verify(servise, times(1)).creatUser(any(UserDto.class));
+        verify(servise, times(1)).createUser(any(UserDto.class));
     }
 
     @Test

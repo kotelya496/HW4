@@ -1,4 +1,4 @@
-package org.example.controller.DTO;
+package org.example.service.DTO;
 
 
 import jakarta.validation.constraints.Email;
