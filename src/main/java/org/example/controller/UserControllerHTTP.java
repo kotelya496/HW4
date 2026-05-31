@@ -69,7 +69,6 @@ public class UserControllerHTTP {
     @GetMapping()
     public ResponseEntity<CollectionModel<UserHateoasDto>> allUsers() {
         log.trace("Запуск метода allUsers в UserControllerHTTP");
-//        return ResponseEntity.status(HttpStatus.OK).body(service.allUsers());
 
         List<UserDto> users = service.allUsers();
 
