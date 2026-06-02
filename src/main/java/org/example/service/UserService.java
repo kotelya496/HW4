@@ -21,11 +21,13 @@ public class UserService {
 
     private final UserRepository repository;
     private final KafkaTemplate<String, MessageEvent> kafkaTemplate;
+    private final HW5FeignClient feignClient;
 
     @Autowired
-    public UserService(UserRepository repository, KafkaTemplate<String, MessageEvent> kafkaTemplate) {
+    public UserService(UserRepository repository, KafkaTemplate<String, MessageEvent> kafkaTemplate, HW5FeignClient feignClient) {
         this.repository = repository;
         this.kafkaTemplate = kafkaTemplate;
+        this.feignClient = feignClient;
     }
 
     public UserDto createUser(UserDto user) {
@@ -34,7 +36,8 @@ public class UserService {
         var userEntity = toUserEntity(user);
         var existUser = toDomainUser(repository.save(userEntity));
         var messageEvent = new MessageEvent(existUser.id(), existUser.email(), StatusMessage.CREATED_USER);
-        kafkaTemplate.send("message-topic", messageEvent);
+        feignClient.sendMessageEvent(messageEvent);
+//        kafkaTemplate.send("message-topic", messageEvent);
         return existUser;
     }
 
@@ -74,7 +77,8 @@ public class UserService {
             return new EntityNotFoundException("Не найден User по ID: " + id);
         });
         var messageEvent = new MessageEvent(existUser.getId(), existUser.getEmail(), StatusMessage.DELETE_USER);
-        kafkaTemplate.send("message-topic",messageEvent);
+        feignClient.sendMessageEvent(messageEvent);
+//        kafkaTemplate.send("message-topic",messageEvent);
         repository.deleteById(id);
     }
 }
